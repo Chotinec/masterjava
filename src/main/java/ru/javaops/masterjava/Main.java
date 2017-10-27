@@ -1,6 +1,11 @@
 package ru.javaops.masterjava;
 
+import ru.javaops.masterjava.matrix.MainMatrix;
 import ru.javaops.masterjava.matrix.MatrixUtil;
+
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * User: gkislin
@@ -10,23 +15,33 @@ import ru.javaops.masterjava.matrix.MatrixUtil;
  * @link https://github.com/JavaOPs/topjava
  */
 public class Main {
-    public static void main(String[] args) {
+    private static final int THREAD_NUMBER = 10;
+
+    private final static ExecutorService executor = Executors.newFixedThreadPool(Main.THREAD_NUMBER);
+
+    public static void main(String[] args) throws Exception {
         System.out.format("Hello MasterJava!");
 
         int[][] matrixA = {
-                { 1, 2, 3 },
-                { 4, 5, 6 },
-                { 5, 2, 1 }
+                {2, 2, 3},
+                {1, 2, 3},
+                {2, 1, 2}
         };
 
         int[][] matrixB = {
-                { 2, 2, 7 },
-                { 4, 8, 6 },
-                { 2, 3, 1 }
+                {1, 3, 4},
+                {2, 4, 3},
+                {1, 5, 3}
         };
 
-        int[][] matrixC = MatrixUtil.singleThreadMultiply(matrixA, matrixB);
+        int[][] matrixC = MatrixUtil.concurrentMultiply(matrixA, matrixB, executor);
+        show(matrixC);
 
+        matrixC = MatrixUtil.singleThreadMultiply(matrixA, matrixB);
+        show(matrixC);
+    }
+
+    public static void show(int[][] matrixC) {
         System.out.println();
         for (int i = 0; i < matrixC.length; i++) {
             for (int j = 0; j < matrixC[i].length; j++) {
