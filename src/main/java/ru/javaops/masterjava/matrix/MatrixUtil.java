@@ -29,8 +29,8 @@ public class MatrixUtil {
 
         final CompletionService<MatrixResult> completionService = new ExecutorCompletionService<>(executor);
 
-        final int[] columnB = new int[matrixSize];
         for (int i = 0; i < matrixSize; i++) {
+            final int[] columnB = new int[matrixSize];
             final int raw = i;
             for (int k = 0; k < matrixSize; k++) {
                 columnB[k] = matrixB[k][raw];
