@@ -66,81 +66,81 @@ import java.util.List;
 public class Payload {
 
     @XmlElement(name = "Projects", namespace = "http://javaops.ru", required = true)
-    protected Payload.Projects projects;
+    protected Projects projects;
     @XmlElement(name = "Cities", namespace = "http://javaops.ru", required = true)
-    protected Payload.Cities cities;
+    protected Cities cities;
     @XmlElement(name = "Users", namespace = "http://javaops.ru", required = true)
-    protected Payload.Users users;
+    protected Users users;
 
     /**
      * Gets the value of the projects property.
-     * 
+     *
      * @return
      *     possible object is
-     *     {@link Payload.Projects }
-     *     
+     *     {@link Projects }
+     *
      */
-    public Payload.Projects getProjects() {
+    public Projects getProjects() {
         return projects;
     }
 
     /**
      * Sets the value of the projects property.
-     * 
+     *
      * @param value
      *     allowed object is
-     *     {@link Payload.Projects }
-     *     
+     *     {@link Projects }
+     *
      */
-    public void setProjects(Payload.Projects value) {
+    public void setProjects(Projects value) {
         this.projects = value;
     }
 
     /**
      * Gets the value of the cities property.
-     * 
+     *
      * @return
      *     possible object is
-     *     {@link Payload.Cities }
-     *     
+     *     {@link Cities }
+     *
      */
-    public Payload.Cities getCities() {
+    public Cities getCities() {
         return cities;
     }
 
     /**
      * Sets the value of the cities property.
-     * 
+     *
      * @param value
      *     allowed object is
-     *     {@link Payload.Cities }
-     *     
+     *     {@link Cities }
+     *
      */
-    public void setCities(Payload.Cities value) {
+    public void setCities(Cities value) {
         this.cities = value;
     }
 
     /**
      * Gets the value of the users property.
-     * 
+     *
      * @return
      *     possible object is
-     *     {@link Payload.Users }
-     *     
+     *     {@link Users }
+     *
      */
-    public Payload.Users getUsers() {
+    public Users getUsers() {
         return users;
     }
 
     /**
      * Sets the value of the users property.
-     * 
+     *
      * @param value
      *     allowed object is
-     *     {@link Payload.Users }
-     *     
+     *     {@link Users }
+     *
      */
-    public void setUsers(Payload.Users value) {
+    public void setUsers(Users value) {
         this.users = value;
     }
 
