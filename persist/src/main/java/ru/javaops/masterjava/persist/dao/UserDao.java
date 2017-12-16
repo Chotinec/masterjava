@@ -1,7 +1,9 @@
 package ru.javaops.masterjava.persist.dao;
 
 import com.bertoncelj.jdbi.entitymapper.EntityMapperFactory;
+import one.util.streamex.IntStreamEx;
 import org.skife.jdbi.v2.sqlobject.*;
+import org.skife.jdbi.v2.sqlobject.customizers.BatchChunkSize;
 import org.skife.jdbi.v2.sqlobject.customizers.RegisterMapperFactory;
 import ru.javaops.masterjava.persist.model.User;
 
@@ -34,4 +36,16 @@ public abstract class UserDao implements AbstractDao {
     @SqlUpdate("TRUNCATE users")
     @Override
     public abstract void clean();
+
+    @SqlBatch("INSERT INTO users (full_name, email, flag) VALUES (:fullName, :email, CAST(:flag AS user_flag)) ON CONFLICT DO NOTHING")
+        /* we could pass an Iterator to deliver Sightings just in time - this could save some heap space */
+    public abstract int[] insertBatchUsers(@BindBean List<User> users, @BatchChunkSize int chunk);
+
+    public List<String> insertAndGetConflictEmails(List<User> users) {
+        int[] res = insertBatchUsers(users, users.size());
+        return IntStreamEx.range(0, users.size())
+                .filter(i ->res[i] == 0)
+                .mapToObj(inndex -> users.get(inndex).getEmail())
+                .toList();
+    }
 }

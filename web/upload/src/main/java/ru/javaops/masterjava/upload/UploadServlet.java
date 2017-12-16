@@ -1,6 +1,8 @@
 package ru.javaops.masterjava.upload;
 
 import org.thymeleaf.context.WebContext;
+import ru.javaops.masterjava.persist.DBIProvider;
+import ru.javaops.masterjava.persist.dao.UserDao;
 import ru.javaops.masterjava.persist.model.User;
 
 import javax.servlet.ServletException;
@@ -19,6 +21,8 @@ import static ru.javaops.masterjava.common.web.ThymeleafListener.engine;
 @WebServlet(urlPatterns = "/", loadOnStartup = 1)
 @MultipartConfig(fileSizeThreshold = 1024 * 1024 * 10) //10 MB in memory limit
 public class UploadServlet extends HttpServlet {
+
+    private UserDao dao = DBIProvider.getDao(UserDao.class);
 
     private final UserProcessor userProcessor = new UserProcessor();
 
@@ -39,8 +43,9 @@ public class UploadServlet extends HttpServlet {
                 throw new IllegalStateException("Upload file have not been selected");
             }
             try (InputStream is = filePart.getInputStream()) {
-                List<User> users = userProcessor.process(is);
-                webContext.setVariable("users", users);
+                int chunkSize = Integer.valueOf(req.getParameter("chunk"));
+                List<UserProcessor.FailedEmail> failed = userProcessor.process(is, chunkSize);
+                webContext.setVariable("failed", failed);
                 engine.process("result", webContext, resp.getWriter());
             }
         } catch (Exception e) {
