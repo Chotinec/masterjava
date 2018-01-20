@@ -1,14 +1,14 @@
 package ru.javaops.masterjava.persist.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 abstract public class BaseEntity {
 
+    @Getter
+    @Setter
     protected Integer id;
 
     public boolean isNew() {
