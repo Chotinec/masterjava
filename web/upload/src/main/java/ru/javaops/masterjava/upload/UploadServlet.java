@@ -25,8 +25,7 @@ import static ru.javaops.masterjava.common.web.ThymeleafListener.engine;
 public class UploadServlet extends HttpServlet {
     private static final int CHUNK_SIZE = 2000;
 
-    private final UserProcessor userProcessor = new UserProcessor();
-    private final CityProcessor cityProcessor = new CityProcessor();
+    private final ProcessPayload processPayload = new ProcessPayload();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -45,9 +44,8 @@ public class UploadServlet extends HttpServlet {
             } else {
                 Part filePart = req.getPart("fileToUpload");
                 try (InputStream is = filePart.getInputStream()) {
-                    Map<String, City> cityMap = cityProcessor.process(is);
-                    is.reset();
-                    List<UserProcessor.FailedEmails> failed = userProcessor.process(is, cityMap, chunkSize);
+                    //is.reset();
+                    List<ProcessPayload.FailedEmails> failed = processPayload.process(is, chunkSize);
                     log.info("Failed users: " + failed);
                     final WebContext webContext =
                             new WebContext(req, resp, req.getServletContext(), req.getLocale(),

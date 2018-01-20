@@ -12,6 +12,7 @@ import ru.javaops.masterjava.xml.schema.ObjectFactory;
 import ru.javaops.masterjava.xml.util.JaxbParser;
 import ru.javaops.masterjava.xml.util.StaxStreamProcessor;
 
+import javax.annotation.processing.Processor;
 import javax.xml.bind.JAXBException;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.XMLEvent;
@@ -33,28 +34,16 @@ public class UserProcessor {
 
     private ExecutorService executorService = Executors.newFixedThreadPool(NUMBER_THREADS);
 
-    @AllArgsConstructor
-    public static class FailedEmails {
-        public String emailsOrRange;
-        public String reason;
-
-        @Override
-        public String toString() {
-            return emailsOrRange + " : " + reason;
-        }
-    }
-
     /*
      * return failed users chunks
      */
-    public List<FailedEmails> process(final InputStream is, Map<String, City> cityMap, int chunkSize) throws XMLStreamException, JAXBException {
+    public List<ProcessPayload.FailedEmails> process(StaxStreamProcessor processor, Map<String, City> cityMap, int chunkSize) throws XMLStreamException, JAXBException {
         log.info("Start processing with chunkSize=" + chunkSize);
 
         Map<String, Future<List<String>>> chunkFutures = new LinkedHashMap<>();  // ordered map (emailRange -> chunk future)
 
         int id = userDao.getSeqAndSkip(chunkSize);
         List<User> chunk = new ArrayList<>(chunkSize);
-        val processor = new StaxStreamProcessor(is);
         //val unmarshaller = jaxbParser.createUnmarshaller();
 
         while (processor.doUntil(XMLEvent.START_ELEMENT, "User")) {
@@ -76,7 +65,7 @@ public class UserProcessor {
             addChunkFutures(chunkFutures, chunk);
         }
 
-        List<FailedEmails> failed = new ArrayList<>();
+        List<ProcessPayload.FailedEmails> failed = new ArrayList<>();
         List<String> allAlreadyPresents = new ArrayList<>();
         chunkFutures.forEach((emailRange, future) -> {
             try {
@@ -85,11 +74,11 @@ public class UserProcessor {
                 allAlreadyPresents.addAll(alreadyPresentsInChunk);
             } catch (InterruptedException | ExecutionException e) {
                 log.error(emailRange + " failed", e);
-                failed.add(new FailedEmails(emailRange, e.toString()));
+                failed.add(new ProcessPayload.FailedEmails(emailRange, e.toString()));
             }
         });
         if (!allAlreadyPresents.isEmpty()) {
-            failed.add(new FailedEmails(allAlreadyPresents.toString(), "already presents"));
+            failed.add(new ProcessPayload.FailedEmails(allAlreadyPresents.toString(), "already presents"));
         }
         return failed;
     }

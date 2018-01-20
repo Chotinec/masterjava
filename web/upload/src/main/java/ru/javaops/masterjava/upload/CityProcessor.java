@@ -19,17 +19,19 @@ public class CityProcessor {
 
     private static CityDao cityDao = DBIProvider.getDao(CityDao.class);
 
-    public Map<String, City> process(final InputStream is) throws XMLStreamException {
+    public Map<String, City> process(StaxStreamProcessor processor) throws XMLStreamException {
+        val map = cityDao.cityMap();
         int id = cityDao.getSeqAndSkip(1);
-        val processor = new StaxStreamProcessor(is);
         List<City> cities = new ArrayList<>();
         while (processor.doUntil(XMLEvent.START_ELEMENT, "City")) {
             String ref = processor.getAttribute("id");
-            String name = processor.getText();
-            cities.add(new City(id++, ref, name));
+            if (map.containsKey(ref)) {
+                String name = processor.getText();
+                cities.add(new City(id++, ref, name));
+            }
         }
-        cityDao.insertBatch(cities);
 
+        cityDao.insertBatch(cities);
         return cityDao.cityMap();
     }
 }
