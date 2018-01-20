@@ -9,19 +9,11 @@ import ru.javaops.masterjava.persist.model.City;
 import java.util.List;
 
 public class CityTestData {
-    public static City city1;
-    public static City city2;
-    public static City city3;
-    public static City city4;
-    public static List<City> FIRST4_CITIES;
-
-    public static void init() {
-        city1 = new City("spb", "Санкт-Петербург");
-        city2 = new City("mow", "Москва");
-        city3 =  new City("kiv", "Киев");
-        city4 = new City("mnsk", "Минск");
-        FIRST4_CITIES = ImmutableList.of(city1, city2, city3, city4);
-    }
+    public static City city1 = new City("spb", "Санкт-Петербург");;
+    public static City city2 = new City("mow", "Москва");;
+    public static City city3 =  new City("kiv", "Киев");;
+    public static City city4 = new City("mnsk", "Минск");;
+    public static List<City> FIRST4_CITIES = ImmutableList.of(city1, city2, city3, city4);;
 
     public static void setUp() {
         CityDao dao = DBIProvider.getDao(CityDao.class);

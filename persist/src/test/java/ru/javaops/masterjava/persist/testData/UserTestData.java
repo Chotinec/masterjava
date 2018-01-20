@@ -18,6 +18,7 @@ public class UserTestData {
     public static List<User> FIST5_USERS;
 
     public static void init() {
+        CityTestData.setUp();
         ADMIN = new User("Admin", "admin@javaops.ru", UserFlag.superuser, CityTestData.city1.getId());
         DELETED = new User("Deleted", "deleted@yandex.ru", UserFlag.deleted, CityTestData.city2.getId());
         FULL_NAME = new User("Full Name", "gmail@gmail.com", UserFlag.active, CityTestData.city3.getId());

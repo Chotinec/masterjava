@@ -14,8 +14,6 @@ public class GroupDaoTest extends AbstractDaoTest<GroupDao> {
 
     @BeforeClass
     public static void init() {
-        ProjectTestData.init();
-        ProjectTestData.setUp();
         GroupTestData.init();
     }
 

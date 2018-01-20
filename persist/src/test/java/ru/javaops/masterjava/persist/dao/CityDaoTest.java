@@ -11,11 +11,6 @@ public class CityDaoTest extends AbstractDaoTest<CityDao> {
         super(CityDao.class);
     }
 
-    @BeforeClass
-    public static void init() throws Exception {
-        CityTestData.init();
-    }
-
     @Before
     public void setUp() throws Exception {
         CityTestData.setUp();

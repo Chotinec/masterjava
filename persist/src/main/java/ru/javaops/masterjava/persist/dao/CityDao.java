@@ -1,6 +1,7 @@
 package ru.javaops.masterjava.persist.dao;
 
 import com.bertoncelj.jdbi.entitymapper.EntityMapperFactory;
+import one.util.streamex.StreamEx;
 import org.skife.jdbi.v2.sqlobject.*;
 import org.skife.jdbi.v2.sqlobject.customizers.RegisterMapperFactory;
 import ru.javaops.masterjava.persist.model.City;
@@ -23,9 +24,7 @@ public abstract class CityDao extends AbstractDao{
     }
 
     public Map<String, City> cityMap() {
-        Map<String, City> cityMap = new LinkedHashMap<>();
-        getAll().stream().forEach(city -> cityMap.put(city.getRef(), city));
-        return cityMap;
+        return StreamEx.of(getAll()).toMap(City::getRef, c -> c);
     }
 
     @SqlUpdate("INSERT INTO city (ref, value) " +

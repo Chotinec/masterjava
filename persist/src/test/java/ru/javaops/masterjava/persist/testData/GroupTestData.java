@@ -17,6 +17,7 @@ public class GroupTestData {
     public static List<Group> FIRST4_GROUPS;
 
     public static void init() {
+        ProjectTestData.setUp();
         GROUP1 = new Group("topjava06", GroupType.finished, ProjectTestData.project1.getId());
         GROUP2 = new Group("topjava07", GroupType.finished, ProjectTestData.project1.getId());
         GROUP3 = new Group("topjava08", GroupType.current, ProjectTestData.project1.getId());

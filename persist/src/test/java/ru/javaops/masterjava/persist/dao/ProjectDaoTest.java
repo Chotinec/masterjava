@@ -11,11 +11,6 @@ public class ProjectDaoTest extends AbstractDaoTest<ProjectDao> {
         super(ProjectDao.class);
     }
 
-    @BeforeClass
-    public static void init() {
-        ProjectTestData.init();
-    }
-
     @Before
     public void setUp() {
         ProjectTestData.setUp();

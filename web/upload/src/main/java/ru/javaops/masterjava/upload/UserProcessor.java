@@ -29,7 +29,6 @@ import java.util.concurrent.Future;
 public class UserProcessor {
     private static final int NUMBER_THREADS = 4;
 
-    private static final JaxbParser jaxbParser = new JaxbParser(ObjectFactory.class);
     private static UserDao userDao = DBIProvider.getDao(UserDao.class);
 
     private ExecutorService executorService = Executors.newFixedThreadPool(NUMBER_THREADS);
